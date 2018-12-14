@@ -18,14 +18,12 @@ app.get('/index.html', function (req, res) {
  
 app.get('/process_get', function (req, res) {
    // 输出 JSON 格式
-   //console.log(mysqlmodel);
-   mysqlmodel.getList();
-   var response = {
-       "first_name":req.query.first_name,
-       "last_name":req.query.last_name
-   };
-   console.log(response);
-   res.end(JSON.stringify(response));
+   var response =  mysqlmodel.getList();
+
+   setTimeout(function(){
+        console.log(111,mysqlmodel.getList(),222);
+        res.end(JSON.stringify(response));
+   },1000)
 })
 
 app.post('/process_post', urlencodedParser, function (req, res) {
