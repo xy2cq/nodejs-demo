@@ -4,7 +4,6 @@ var bodyParser = require('body-parser');
 var multer  = require('multer');
 var fs = require("fs");
 var cookieParser = require('cookie-parser')
-var util = require('util');
 var urlencodedParser = bodyParser.urlencoded({ extended: false })
 
 app.use(multer({ dest: '/tmp/'}).array('image'));
@@ -15,15 +14,15 @@ var mysqlmodel = require('./src/model/mysqlmodel');
 app.get('/index.html', function (req, res) {
    res.sendFile( __dirname + "/" + "index.html" );
 })
- 
+
 app.get('/process_get', function (req, res) {
    // 输出 JSON 格式
-   var response =  mysqlmodel.getList();
-
-   setTimeout(function(){
-        console.log(111,mysqlmodel.getList(),222);
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Content-Length, Authorization, Accept, X-Requested-With , yourHeaderFeild');
+    res.setHeader('Access-Control-Allow-Methods', 'PUT, POST, GET, DELETE, OPTIONS');
+    new Promise(function(resolve){mysqlmodel.getList(res,resolve)}).then(function(response){
         res.end(JSON.stringify(response));
-   },1000)
+    });
 })
 
 app.post('/process_post', urlencodedParser, function (req, res) {

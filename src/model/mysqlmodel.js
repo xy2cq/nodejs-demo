@@ -27,21 +27,31 @@ connection.connect();
 //     }
 // };
 module.exports = {
-    test:'131231',
-    getList: function () {
+    jsonWrite: function(res, ret) {
+        if(typeof ret === 'undefined'){
+            res.json({
+                code: 0,
+                msg: '操作失败'
+            })
+        }else{
+            res.json({
+                code:1,
+                body:ret
+            });
+        }
+    },
+    getList: function (res,resolve) {
         var sql = 'SELECT * FROM websites';
         const _this = this;
-        new Promise(function(resolve, reject){
             connection.query(sql,function (err, result) {
                 if(err){
                     console.log('[SELECT ERROR] - ',err.message);
                     return;
-                }                
-                resolve(result);
+                }   
+                _this.jsonWrite(res,result);         
+                console.log(res);       
+                resolve(res);
             });
-        }).then(function(result){ 
-            return result;
-        });
     }
 }
 
