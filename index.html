@@ -1,8 +1,19 @@
 <html>
+<style>
+    #website-list{
+        color:gray;
+    }
+    #website-list li span{
+        display: inline-block;
+    }
+</style>
 <body>
+<p>get请求数据库测试</p>
+<ul id = "website-list"></ul>
 <form action="http://127.0.0.1:8081/process_post" method="POST">
-    First Name: <input type="text" name="first_name">  <br />    
-    Last Name: <input type="text" name="last_name">
+    国家: <input type="text" name="country">  <br />    
+    名字: <input type="text" name="name">  <br />    
+    url：<input type="text" name="url">
     <input type="submit" value="Submit">
 </form>
 <form action="/file_upload" method="post" enctype="multipart/form-data">
@@ -10,4 +21,21 @@
     <input type="submit" value="上传文件" />
 </form>
 </body>
+<script src="https://www.huomao.com/static/web/js/jquery.min.js"></script>
+<script>
+    $.ajax({
+        type: 'get',
+        async: false,
+        url: 'http://127.0.0.1:8081/process_get',
+        success: function success(res) {
+            if(res.code==1){
+                let html = "";
+                res.body.forEach(item=>{
+                    html += `<li><span style="width:150px;">国家：${item.country}</span><span style="width:200px;">名字：${item.name}</span><span style="width:300px;">url：${item.url}</span></li>`
+                });
+                $("#website-list").append(html);
+            }
+        } 
+    });
+</script>
 </html>
