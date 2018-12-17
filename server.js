@@ -11,7 +11,7 @@ app.use(express.static('public'));
 app.use(cookieParser()) 
 var mysqlmodel = require('./src/model/mysqlmodel');
 
-app.get('/index.html', function (req, res) {
+app.get('/index', function (req, res) {
    res.sendFile( __dirname + "/" + "index.html" );
 })
 
@@ -26,20 +26,23 @@ app.get('/process_get', function (req, res) {
 })
 
 app.post('/process_post', urlencodedParser, function (req, res) {
- 
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Content-Length, Authorization, Accept, X-Requested-With , yourHeaderFeild');
+    res.setHeader('Access-Control-Allow-Methods', 'PUT, POST, GET, DELETE, OPTIONS');
     // 输出 JSON 格式
-    var response = {
-        "first_name":req.body.first_name,
-        "last_name":req.body.last_name
-    };
-    console.log(response);
-    res.end(JSON.stringify(response));
+    console.log(req);
+    var params = [
+        req.body.country,
+        req.body.name,
+        req.body.url,
+    ];
+    new Promise(function(resolve){mysqlmodel.addList(res,params,resolve)}).then(function(response){
+        res.end(JSON.stringify(response));
+    });
 })
 
-app.post('/file_upload', function (req, res) {
- 
-    console.log(req.files[0]);  // 上传的文件信息
-  
+app.post('/file_upload', function (req, res) { 
+    console.log(req.files[0]);  // 上传的文件信息  
     var des_file = __dirname + "/file/" + req.files[0].originalname;
     fs.readFile( req.files[0].path, function (err, data) {
          fs.writeFile(des_file, data, function (err) {

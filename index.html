@@ -10,12 +10,12 @@
 <body>
 <p>get请求数据库测试</p>
 <ul id = "website-list"></ul>
-<form action="http://127.0.0.1:8081/process_post" method="POST">
-    国家: <input type="text" name="country">  <br />    
-    名字: <input type="text" name="name">  <br />    
-    url：<input type="text" name="url">
-    <input type="submit" value="Submit">
-</form>
+<div id="form1">
+    国家: <input type="text" name="country" id="country">  <br />    
+    名字: <input type="text" name="name" id="name">  <br />    
+    url ：<input type="text" name="url" id="url">
+    <input type="submit" value="Submit" id="addList">
+</div>
 <form action="/file_upload" method="post" enctype="multipart/form-data">
     <input type="file" name="image" size="50" /><br />
     <input type="submit" value="上传文件" />
@@ -37,5 +37,21 @@
             }
         } 
     });
+    $("#addList").click(function(){addList();});
+    function addList(){
+        $.ajax({
+            type: 'post',
+            async: false,
+            url: 'http://127.0.0.1:8081/process_post',
+            data: {country:$("#country").val(),name:$("#name").val(),url:$("#url").val()},
+            success: function success(res) {
+                if(res.code==1){
+                    alert("添加成功");
+                    window.location.reload();
+                }
+            } 
+        });        
+        console.log($('#form1').serialize());
+    }
 </script>
 </html>
