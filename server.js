@@ -43,7 +43,7 @@ app.post('/process_post', urlencodedParser, function (req, res) {
 
 app.post('/file_upload', function (req, res) { 
     console.log(req.files[0]);  // 上传的文件信息  
-    var des_file = __dirname + "/file/" + req.files[0].originalname;
+    var des_file = __dirname + "/src/file/" + req.files[0].originalname;
     fs.readFile( req.files[0].path, function (err, data) {
          fs.writeFile(des_file, data, function (err) {
           if( err ){
@@ -54,7 +54,6 @@ app.post('/file_upload', function (req, res) {
                     filename:req.files[0].originalname
                };
            }
-           console.log( response );
            res.end( JSON.stringify( response ) );
         });
     });
